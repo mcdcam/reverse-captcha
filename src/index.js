@@ -81,7 +81,7 @@ const CaptchaInner = (props) => {
                                 duration={props.duration}
                                 colors={["#004777", "#F7B801", "#A30000"]}
                                 colorsTime={[5, 3, 0]}
-                                onComplete={() => props.timeUp()}
+                                onComplete={props.timeUp}
                             >
                             {renderTime}
                             </CountdownCircleTimer>
@@ -91,7 +91,7 @@ const CaptchaInner = (props) => {
                     </div>
                     <div className='button-area'>
                         <div className='grid-child button-wrapper'>
-                            <button className={'button ' + props.buttonhidden} type='button' onClick={() => props.openChallenge()} ref={setReferenceElement}></button>
+                            <button className={'button ' + props.buttonhidden} type='button' onClick={props.openChallenge} ref={setReferenceElement}></button>
                             <img className={'check ' + props.checkhidden} src={check} alt='checkmark'></img>
                         </div>
                         <div className='grid-child-text'>
@@ -177,9 +177,9 @@ class Captcha extends react.Component {
             this.hidePopper();
             this.setState({
                 checkhidden: '',
-                buttonhidden: 'hidden'
+                buttonhidden: 'hidden',
+                isplaying: false
             });
-            this.refreshChallenge();
         } else {
             this.showError();
             setTimeout(() => this.refreshChallenge(), 2000);
