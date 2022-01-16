@@ -1,4 +1,11 @@
-# Getting Started with Create React App
+# Reverse reCAPTCHA
+
+In order to pass this CAPTCHA you must be a robot (or *insanely* fast at mental math). If you want to try actually solving the problems, you can set the timer `duration` in the `state` of the `Captcha` class.
+
+- Made with React + popperjs (first time i've used these)
+- May contain traces of spaghetti code
+
+#
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
