@@ -1,4 +1,17 @@
-# Reverse reCAPTCHA
+# Reverse reCAPTCHA v2
+
+### If you want to access the v1 version, build it yourself (:
+
+#### Version 2 changes the following:
+- 2 correct answers in a row required
+- the following new challenges are added:
+  - integral over a range
+  - floating point errors
+  - vector decomposition (glorified trig)
+  - volume of a rhombicosidodecahedron
+- the pi challenge now requires the sum of many digits rather than a single digit
+- the exponent challenge is disabled
+- the colours on the timer now match the page colour scheme
 
 In order to pass this CAPTCHA you must be a robot (or *insanely* fast at mental math). If you want to try actually solving the problems, you can set the timer `duration` in the `state` of the `Captcha` class.
 
