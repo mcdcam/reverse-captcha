@@ -14,11 +14,19 @@ import "./index.css";
 import logo from "./resources/logo.svg";
 import check from "./resources/check.svg";
 
+var Calculess = require('calculess');
+var Calc = Calculess.prototype;
+
 var popperObject;
 
 var sha256 = require("js-sha256");
 
 /* global BigInt */
+
+// Generate pi before loading content, takes about half a second
+var pi = generate_pi(10010);
+
+// var demoindex = 0; // demo
 
 const CaptchaChallenge = (props) => {
   return (
@@ -94,8 +102,8 @@ const CaptchaInner = (props) => {
               strokeWidth={6}
               isPlaying={props.isplaying}
               duration={props.duration}
-              colors={["#004777", "#F7B801", "#A30000"]}
-              colorsTime={[5, 3, 0]}
+              colors={["#1a73e8", "#de5246", "#de5246"]}
+              colorsTime={[props.duration, 1.5, 0]}
               onComplete={props.timeUp}
             >
               {renderTime}
@@ -142,7 +150,7 @@ class Captcha extends react.Component {
     this.state = {
       opacity: 0,
       popperShown: undefined,
-      duration: 5,
+      duration: 8,
       checkhidden: "hidden",
       buttonhidden: "",
       headercolor: "popup-header",
@@ -155,6 +163,8 @@ class Captcha extends react.Component {
       submitOnEnter: this.submitOnEnter,
       challenge: this.generateChallenge(),
       isplaying: false,
+      requiredcorrect: 2,
+      numcorrect: 0,
     };
   }
 
@@ -201,7 +211,7 @@ class Captcha extends react.Component {
   };
 
   verifyInputValue = () => {
-    if (this.state.headercolor === "popup-header-red") {
+    if (this.state.headercolor !== "popup-header") {
       // this is horrible but i'm lazy
       return;
     }
@@ -209,15 +219,9 @@ class Captcha extends react.Component {
       this.state.inputvalue !== "" &&
       String(this.state.inputvalue) === String(this.state.challenge[3])
     ) {
-      this.hidePopper();
-      this.setState({
-        checkhidden: "",
-        buttonhidden: "hidden",
-        isplaying: false,
-      });
+      this.showCorrect();
     } else {
       this.showError();
-      setTimeout(() => this.refreshChallenge(), 2000);
     }
   };
 
@@ -226,7 +230,7 @@ class Captcha extends react.Component {
       challenge: [
         "Hurry up, slowass",
         "try again",
-        "​", //ZWS
+        this.state.numcorrect + "/" + this.state.requiredcorrect + " complete",
         "",
       ],
       headercolor: "popup-header-red",
@@ -241,18 +245,48 @@ class Captcha extends react.Component {
       challenge: [
         "I dunno, you look pretty human to me",
         "try again",
-        "​", //ZWS
+        this.state.numcorrect + "/" + this.state.requiredcorrect + " complete",
         "",
       ],
       headercolor: "popup-header-red",
       inputvalue: "",
+      isplaying: false,
+      numcorrect: 0,
+    });
+    setTimeout(() => this.refreshChallenge(), 2000);
+  };
+
+  showCorrect = () => {
+    if (this.state.numcorrect + 1 >= this.state.requiredcorrect) {
+      this.challengesComplete();
+    }
+    this.setState({
+      challenge: [
+        "Hmmm, you might actually be a robot",
+        "correct",
+        this.state.numcorrect+1 + "/" + this.state.requiredcorrect + " complete",
+        "",
+      ],
+      headercolor: "popup-header-green",
+      inputvalue: "",
+      isplaying: false,
+      numcorrect: this.state.numcorrect + 1,
+    });
+    setTimeout(() => this.refreshChallenge(), 2000);
+  };
+
+  challengesComplete = () => {
+    this.hidePopper();
+    this.setState({
+      checkhidden: "",
+      buttonhidden: "hidden",
       isplaying: false,
     });
   };
 
   refreshChallenge = () => {
     this.setState({
-      duration: 2 + (this.state.duration - 2) * 0.75,
+      duration: 4 + (this.state.duration - 4) * 0.85,
       headercolor: "popup-header",
       challenge: this.generateChallenge(),
       inputvalue: "",
@@ -264,20 +298,33 @@ class Captcha extends react.Component {
   generateChallenge() {
     /*
         - sqrt
-        - pi
+        - pi (see below)
         - ln
-        - power
+        - power (disabled because it's boring, feel free to add it back to `types`)
         - sha256
+    <-------v2------->
+        - integral of random trig function between random values
+        - sum of the first n digits of pi
+        - floating point math
+        - decompose vector
+        - volume of a rhombicosidodecahedron
         */
 
-    var types = ["sqrt", "pi", "ln", "pwr", "sha"];
+    var types = ["sqrt", "pi", "ln", "sha", 'integ', 'float', 'vector', 'wtf']; // prod
+    const randomElement = types[Math.floor(Math.random() * types.length)]; //prod
 
-    const randomElement = types[Math.floor(Math.random() * types.length)];
+    /*/-------------DEMO-------------//
+    var demoorder = ["pi", 'vector', 'integ', 'float', 'wtf']; //demo
+    const randomElement = demoorder[demoindex % demoorder.length]; // demo
+    demoindex++; //demo
+    //------------------------------/*/
 
     var topText;
     var bottomText;
     var answer;
     var footer;
+
+    var rannum;
 
     switch (randomElement) {
       case "sqrt":
@@ -287,11 +334,11 @@ class Captcha extends react.Component {
         answer = (Math.sqrt(bottomText) + Number.EPSILON).toFixed(5);
         break;
       case "pi":
-        topText = "Please enter";
-        let rannum = Math.round(Math.random() * 900 + 100);
-        bottomText = "the " + ordinal_suffix_of(rannum) + " digit of pi";
+        topText = "Please enter the sum of";
+        rannum = Math.round(Math.random() * 9000 + 1000);
+        bottomText = "the first " + rannum + " digits of pi";
         footer = "after the decimal point";
-        answer = nth_digit_of_pi(rannum);
+        answer = String(pi).split('').slice(1, rannum + 1).reduce((partial_sum, a) => partial_sum + Number(a), 0);
         break;
       case "ln":
         topText = "Please enter the natural log of";
@@ -312,6 +359,51 @@ class Captcha extends react.Component {
         bottomText = Math.random().toString(36).substring(2, 15);
         footer = "hexadecimal encoded";
         answer = sha256(bottomText);
+        break;
+      case "integ":
+        topText = "Please enter the integral of";
+        let funcs = [Math.sin, Math.cos];
+        let func = funcs[Math.floor(Math.random() * funcs.length)];
+        rannum = Number((Math.random() * 95 + 5).toPrecision(3));
+        bottomText = (func === Math.sin ? "sin(x)" : "cos(x)") + " for 0 < x < " + rannum;
+        footer = "to 3 decimal places";
+        answer = (Calc.integral(0, rannum, (x) => {return func(x)}, 10000) + Number.EPSILON).toFixed(3);
+        break;
+      case "vector":
+        topText = "Please enter the horizontal component of";
+        let magnitude = Number((Math.random()*100).toPrecision(3));
+        let angle = Number((Math.random()*90).toPrecision(3));
+        bottomText = "a vector with magnitude " + magnitude + " and direction " + angle + "°";
+        footer = "to 3 decimal places";
+        answer = (magnitude*Math.cos(angle*(Math.PI/180)) + Number.EPSILON).toFixed(3);
+        break;
+      case "float":
+        // find floating point error
+        rannum = (Math.random()*9.9+0.1).toFixed(1);
+        let errornum = 0.1;
+        let i = 0;
+        // wow, i hate this
+        while (String(Number(rannum) + errornum) === String(parseFloat((Number(rannum) + errornum).toFixed(10)))) {
+          if (i > 100) {
+            rannum = (Math.random()*9.9+0.1).toFixed(1);
+            errornum = 0.1;
+            i = 0;
+          }
+          errornum = Number((Number(errornum) + 0.1).toFixed(1));
+          i++;
+        }
+
+        topText = "Please enter the result of";
+        bottomText = rannum + ' + ' + errornum;
+        footer = "according to javascript";
+        answer = Number(rannum) + errornum;
+        break;
+      case "wtf":
+        rannum = Number((Math.random() * 99 + 1).toFixed(0));
+        topText = "Please enter the volume of a";
+        bottomText = "rhombicosidodecahedron with edge length " + rannum;
+        footer = "to 2 decimal places";
+        answer = (((rannum**3)/3)*(60+29*Math.sqrt(5))).toFixed(2);
         break;
       default:
         console.log("Error: switch case no match");
@@ -346,30 +438,15 @@ ReactDOM.render(<Captcha />, document.getElementById("root"));
 
 //------------------> Helper Functions <------------------\\
 
-function ordinal_suffix_of(i) {
-  var j = i % 10,
-    k = i % 100;
-  if (j === 1 && k !== 11) {
-    return i + "st";
+function generate_pi(n) {
+    n += 20;
+    let i = 1n;
+    let x = 3n * 10n ** BigInt(n);
+    let pi = x;
+    while (x > 0) {
+      x = (x * i) / ((i + 1n) * 4n);
+      pi += x / (i + 2n);
+      i += 2n;
+    }
+    return pi / 10n ** 20n;
   }
-  if (j === 2 && k !== 12) {
-    return i + "nd";
-  }
-  if (j === 3 && k !== 13) {
-    return i + "rd";
-  }
-  return i + "th";
-}
-
-function nth_digit_of_pi(n) {
-  n += 20;
-  let i = 1n;
-  let x = 3n * 10n ** BigInt(n);
-  let pi = x;
-  while (x > 0) {
-    x = (x * i) / ((i + 1n) * 4n);
-    pi += x / (i + 2n);
-    i += 2n;
-  }
-  return (pi / 10n ** 20n) % 10n;
-}
