@@ -1,6 +1,6 @@
 # Reverse reCAPTCHA v2
 
-### If you want to access the v1 version, build it yourself (:
+### If you want to access the v1 version, build it yourself from [here](https://github.com/very-lame-username/reverse-captcha/tree/e394559e9edf3e2f888ab10526089da6acb14637) (:
 
 #### Version 2 changes the following:
 - 2 correct answers in a row required
