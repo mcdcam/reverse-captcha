@@ -14,7 +14,7 @@ import "./index.css";
 import logo from "./resources/logo.svg";
 import check from "./resources/check.svg";
 
-var Calculess = require('calculess');
+var Calculess = require("calculess");
 var Calc = Calculess.prototype;
 
 var popperObject;
@@ -264,7 +264,11 @@ class Captcha extends react.Component {
       challenge: [
         "Hmmm, you might actually be a robot",
         "correct",
-        this.state.numcorrect+1 + "/" + this.state.requiredcorrect + " complete",
+        this.state.numcorrect +
+          1 +
+          "/" +
+          this.state.requiredcorrect +
+          " complete",
         "",
       ],
       headercolor: "popup-header-green",
@@ -310,7 +314,7 @@ class Captcha extends react.Component {
         - volume of a rhombicosidodecahedron
         */
 
-    var types = ["sqrt", "pi", "ln", "sha", 'integ', 'float', 'vector', 'wtf']; // prod
+    var types = ["sqrt", "pi", "ln", "sha", "integ", "float", "vector", "wtf"]; // prod
     const randomElement = types[Math.floor(Math.random() * types.length)]; //prod
 
     /*/-------------DEMO-------------//
@@ -338,7 +342,10 @@ class Captcha extends react.Component {
         rannum = Math.round(Math.random() * 9000 + 1000);
         bottomText = "the first " + rannum + " digits of pi";
         footer = "after the decimal point";
-        answer = String(pi).split('').slice(1, rannum + 1).reduce((partial_sum, a) => partial_sum + Number(a), 0);
+        answer = String(pi)
+          .split("")
+          .slice(1, rannum + 1)
+          .reduce((partial_sum, a) => partial_sum + Number(a), 0);
         break;
       case "ln":
         topText = "Please enter the natural log of";
@@ -365,27 +372,48 @@ class Captcha extends react.Component {
         let funcs = [Math.sin, Math.cos];
         let func = funcs[Math.floor(Math.random() * funcs.length)];
         rannum = Number((Math.random() * 95 + 5).toPrecision(3));
-        bottomText = (func === Math.sin ? "sin(x)" : "cos(x)") + " for 0 < x < " + rannum;
+        bottomText =
+          (func === Math.sin ? "sin(x)" : "cos(x)") + " for 0 < x < " + rannum;
         footer = "to 3 decimal places";
-        answer = (Calc.integral(0, rannum, (x) => {return func(x)}, 10000) + Number.EPSILON).toFixed(3);
+        answer = (
+          Calc.integral(
+            0,
+            rannum,
+            (x) => {
+              return func(x);
+            },
+            10000
+          ) + Number.EPSILON
+        ).toFixed(3);
         break;
       case "vector":
         topText = "Please enter the horizontal component of";
-        let magnitude = Number((Math.random()*100).toPrecision(3));
-        let angle = Number((Math.random()*90).toPrecision(3));
-        bottomText = "a vector with magnitude " + magnitude + " and direction " + angle + "°";
+        let magnitude = Number((Math.random() * 100).toPrecision(3));
+        let angle = Number((Math.random() * 90).toPrecision(3));
+        bottomText =
+          "a vector with magnitude " +
+          magnitude +
+          " and direction " +
+          angle +
+          "°";
         footer = "to 3 decimal places";
-        answer = (magnitude*Math.cos(angle*(Math.PI/180)) + Number.EPSILON).toFixed(3);
+        answer = (
+          magnitude * Math.cos(angle * (Math.PI / 180)) +
+          Number.EPSILON
+        ).toFixed(3);
         break;
       case "float":
         // find floating point error
-        rannum = (Math.random()*9.9+0.1).toFixed(1);
+        rannum = (Math.random() * 9.9 + 0.1).toFixed(1);
         let errornum = 0.1;
         let i = 0;
         // wow, i hate this
-        while (String(Number(rannum) + errornum) === String(parseFloat((Number(rannum) + errornum).toFixed(10)))) {
+        while (
+          String(Number(rannum) + errornum) ===
+          String(parseFloat((Number(rannum) + errornum).toFixed(10)))
+        ) {
           if (i > 100) {
-            rannum = (Math.random()*9.9+0.1).toFixed(1);
+            rannum = (Math.random() * 9.9 + 0.1).toFixed(1);
             errornum = 0.1;
             i = 0;
           }
@@ -394,7 +422,7 @@ class Captcha extends react.Component {
         }
 
         topText = "Please enter the result of";
-        bottomText = rannum + ' + ' + errornum;
+        bottomText = rannum + " + " + errornum;
         footer = "according to javascript";
         answer = Number(rannum) + errornum;
         break;
@@ -403,7 +431,7 @@ class Captcha extends react.Component {
         topText = "Please enter the volume of a";
         bottomText = "rhombicosidodecahedron with edge length " + rannum;
         footer = "to 2 decimal places";
-        answer = (((rannum**3)/3)*(60+29*Math.sqrt(5))).toFixed(2);
+        answer = ((rannum ** 3 / 3) * (60 + 29 * Math.sqrt(5))).toFixed(2);
         break;
       default:
         console.log("Error: switch case no match");
@@ -439,14 +467,14 @@ ReactDOM.render(<Captcha />, document.getElementById("root"));
 //------------------> Helper Functions <------------------\\
 
 function generate_pi(n) {
-    n += 20;
-    let i = 1n;
-    let x = 3n * 10n ** BigInt(n);
-    let pi = x;
-    while (x > 0) {
-      x = (x * i) / ((i + 1n) * 4n);
-      pi += x / (i + 2n);
-      i += 2n;
-    }
-    return pi / 10n ** 20n;
+  n += 20;
+  let i = 1n;
+  let x = 3n * 10n ** BigInt(n);
+  let pi = x;
+  while (x > 0) {
+    x = (x * i) / ((i + 1n) * 4n);
+    pi += x / (i + 2n);
+    i += 2n;
   }
+  return pi / 10n ** 20n;
+}
