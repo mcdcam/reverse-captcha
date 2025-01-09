@@ -1,6 +1,7 @@
 {
   "name": "reverse-captcha",
   "version": "0.1.0",
+  "homepage": "https://mcdcam.github.io/reverse-captcha",
   "private": true,
   "dependencies": {
     "@popperjs/core": "^2.11.2",
@@ -8,6 +9,7 @@
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
     "calculess": "^1.0.2",
+    "gh-pages": "^6.3.0",
     "js-sha256": "^0.9.0",
     "react": "^17.0.2",
     "react-countdown-circle-timer": "^3.0.6",
@@ -17,6 +19,8 @@
     "web-vitals": "^2.1.3"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
