@@ -1,90 +1,20 @@
-# Reverse reCAPTCHA v2
+# [Reverse reCAPTCHA](https://mcdcam.github.io/reverse-captcha/)
 
-### If you want to access the v1 version, build it yourself from [here](https://github.com/very-lame-username/reverse-captcha/tree/e394559e9edf3e2f888ab10526089da6acb14637) (:
+Unlike a normal CAPTCHA designed to filter out robots, this one filters out _humans_!
 
-#### Version 2 changes the following:
-- 2 correct answers in a row required
-- the following new challenges are added:
-  - integral over a range
-  - floating point errors
-  - vector decomposition (glorified trig)
-  - volume of a rhombicosidodecahedron
-- the pi challenge now requires the sum of many digits rather than a single digit
-- the exponent challenge is disabled
-- the colours on the timer now match the page colour scheme
+In order to pass you must be a robot (or *insanely* fast at mental math). If you want to try actually solving the problems, you can modify the timer `duration` in the state of the `Captcha` class.
 
-In order to pass this CAPTCHA you must be a robot (or *insanely* fast at mental math). If you want to try actually solving the problems, you can set the timer `duration` in the `state` of the `Captcha` class.
+Made with React + Popper.js (warning: first time I've used these).
 
-- Made with React + popperjs (first time i've used these)
-- May contain traces of spaghetti code
+---
 
-#
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+#### Version 2 changelog:
+- 2 correct answers in a row required.
+- The following new challenges are added:
+  - Definite integrals
+  - Floating point errors
+  - Vector decomposition
+  - Volume of a rhombicosidodecahedron
+- The pi challenge now requires the sum of many digits rather than a single digit.
+- The exponent challenge is disabled.
+- The colours on the timer now match the page colour scheme.
